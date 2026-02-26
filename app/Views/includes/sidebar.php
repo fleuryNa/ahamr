@@ -70,7 +70,9 @@
          <nav class="mt-2">
             <!--begin::Sidebar Menu-->
             <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
-               <?php if (hasRole('dashboard')): ?>
+
+            <?php if (hasRole('dashboard')): ?>
+
                <li class="nav-item<?php echo(in_array('dashboard', $segments)) ? ' menu-open' : ''; ?>">
                   <a href="#" class="nav-link">
                      <i class="nav-icon bi bi-speedometer"></i>
@@ -90,7 +92,32 @@
                   </ul>
                </li>
                <?php endif; ?>
+            <?php if (hasRole('infrastructure')): ?>
 
+               <li class="nav-item<?php echo(in_array('infrastructure', $segments)) ? ' menu-open' : ''; ?>">
+                  <a href="#" class="nav-link">
+                     <i class="nav-icon bi bi-water"></i>
+                     <p>
+                        Infrastructure
+                        <i class="nav-arrow bi bi-chevron-right"></i>
+                     </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                     <li class="nav-item">
+                        <a href="<?php echo base_url('infrastructure/aep') ?>" class="nav-link<?php echo(end($segments) == 'aep') ? ' active' : ''; ?>">
+                           <i class="nav-icon bi bi-droplet-fill"></i>
+                           <p>AEP</p>
+                        </a>
+                     </li>
+                     <li class="nav-item">
+                        <a href="<?php echo base_url('infrastructure') ?>" class="nav-link<?php echo(end($segments) == 'infrastructure') ? ' active' : ''; ?>">
+                           <i class="nav-icon bi bi-moisture"></i>
+                           <p>Infrastructure</p>
+                        </a>
+                     </li>
+                  </ul>
+               </li>
+               <?php endif; ?>
 
 <?php if (hasRole('admin')): ?>
                <li class="nav-item<?php echo(in_array('admin', $segments)) ? ' menu-open' : ''; ?>">
