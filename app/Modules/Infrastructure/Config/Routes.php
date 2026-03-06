@@ -4,7 +4,7 @@ use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
 
-$routes->group('infrastructure', ['namespace' => 'Modules\Infrastructure\Controllers'], ['filter' => 'checkLogin'], function ($routes) {
+$routes->group('infrastructure', ['namespace' => 'Modules\Infrastructure\Controllers', 'filter' => 'checkLogin'], function ($routes) {
     $routes->get('/', 'Infrastructure::index');
     $routes->post('liste_captage', 'Infrastructure::getInfraCaptage');
     $routes->post('liste_chambre', 'Infrastructure::getInfraChambre');
@@ -31,5 +31,12 @@ $routes->group('infrastructure', ['namespace' => 'Modules\Infrastructure\Control
     $routes->post('delete_archive/(:num)', 'Aep::deleteArchive/$1');
     $routes->get('download_archive/(:num)', 'Aep::downloadArchive/$1');
     $routes->post('liste_archives', 'Aep::archiveList');
+
+    //Maintenance
+    $routes->get('maintenance', 'Maintenance::index');
+    $routes->post('liste_maintenance', 'Maintenance::getMaintenance');
+    $routes->post('validerMdata', 'Maintenance::validerMaintenance');
+
+    $routes->post('getDetailsMaintenance/(:num)', 'Maintenance::getMaintenanceById/$1');
 
 });

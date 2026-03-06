@@ -153,12 +153,63 @@ if (! function_exists('numberToWordsFrCurrency')) {
         $result = trim($mainWord . ' ' . $mainLabel);
 
         if ($fraction > 0) {
-            $fractionWord = numberToWordsFr($fraction);
-            $subLabel     = $sub . ($fraction > 1 ? 's' : '');
-            $result .= ' et ' . $fractionWord . ' ' . $subLabel;
+            $fractionWord  = numberToWordsFr($fraction);
+            $subLabel      = $sub . ($fraction > 1 ? 's' : '');
+            $result       .= ' et ' . $fractionWord . ' ' . $subLabel;
         }
 
         // première lettre en majuscule
         return mb_strtoupper(mb_substr($result, 0, 1)) . mb_substr($result, 1);
     }
+    if (! function_exists('generateInfraCode')) {
+        function generateInfraCode($provinceId, $communeId, $typeInfraId)
+        {
+            $db = db_connect();
+
+            // Récupérer les codes (2 lettres)
+            $province = $db->table('provinces')
+                ->select('PROVINCE_NAME')
+                ->where('PROVINCE_ID', $provinceId)
+                ->get()
+                ->getRow();
+
+            $commune = $db->table('communes')
+                ->select('COMMUNE_NAME')
+                ->where('COMMUNE_ID', $communeId)
+                ->get()
+                ->getRow();
+
+            // couper le nom en 2 lettres
+            $provCode = substr($province->PROVINCE_NAME, 0, 2);
+            $commCode = substr($commune->COMMUNE_NAME, 0, 2);
+
+            // Codes types
+            $types = [
+                1 => 'CAP', 2 => 'CHM', 3 => 'CND', 4 => 'RES', 5 => 'BF', 6 => 'AEP',
+            ];
+            $typeCode = $types[$typeInfraId] ?? 'INF';
+
+            // Compter par type
+            if ($typeInfraId == 6) {
+                $count = $db->table('aep')
+                    ->where('PROVINCE_ID', $provinceId)
+                    ->where('COMMUNE_ID', $communeId)
+                    ->countAllResults();
+            } else {
+                $count = $db->table('aep_infrastructures')
+                    ->where('PROVINCE', $provinceId)
+                    ->where('COMMUNE', $communeId)
+                    ->where('TYPE_INFRA_ID', $typeInfraId)
+                    ->countAllResults();
+            }
+
+            $nextNum = $count + 1;
+
+            // Format: si < 1000 -> 3 chiffres, sinon pas de padding
+            $numero = ($nextNum < 1000) ? str_pad($nextNum, 3, '0', STR_PAD_LEFT) : $nextNum;
+            return strtoupper($provCode . $commCode . $typeCode) . '-' . $numero;
+        }
+
+    }
+
 }

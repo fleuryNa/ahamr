@@ -133,6 +133,8 @@
                                         <th>ETAT</th>
                                         <th>NOM</th>
                                         <th >BRANCHEMENT</th>
+                                        <th>INSTITUTION</th>
+                                        <th>COMPTEUR</th>
                                         <th>CODE</th>
                                         <th>ACTION</th>
                                         </tr>
@@ -254,7 +256,7 @@
                    </div>
                    <div id="inputbf">
                       <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="TYPE_BRANCHEMENT_ID" class="form-label"><strong>Type branchement</strong></label>
                                     <select name="TYPE_BRANCHEMENT_ID" id="TYPE_BRANCHEMENT_ID" class="form-select" >
@@ -265,7 +267,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="BR_TYPE_INSTITUTION_ID" class="form-label"><strong>Type institution</strong></label>
                                     <select name="BR_TYPE_INSTITUTION_ID" id="BR_TYPE_INSTITUTION_ID" class="form-select" >
@@ -276,10 +278,16 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="NOM_INSTITUTION" class="form-label"><strong>Institution</strong></label>
                                     <input type="text" class="form-control" id="NOM_INSTITUTION" name="NOM_INSTITUTION" placeholder="Nom de l'institution" >
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="NUMERO_COMPTEUR" class="form-label"><strong>Numéro compteur</strong></label>
+                                    <input type="text" class="form-control" id="NUMERO_COMPTEUR" name="NUMERO_COMPTEUR" placeholder="Numéro du compteur" >
                                 </div>
                             </div>
                         </div>
@@ -952,7 +960,7 @@ function validateForm() {
             isValid = false;
         }
        // Si le type de branchement est "privé", alors les champs liés à l'institution deviennent obligatoires
-        if(typeBranchement.value && typeBranchement.value == '2') {
+        if(typeBranchement.value && typeBranchement.value == '1') {
 
                 if (!nominstitution.value.trim()) {
                     addErrorStyle(nominstitution);
@@ -1255,6 +1263,7 @@ function fillFormData(data) {
 
     document.getElementById('NOM').value = data.NOM || '';
     document.getElementById('NOM_INSTITUTION').value = data.NOM_INSTITUTION || '';
+    document.getElementById('NUMERO_COMPTEUR').value = data.NUMERO_COMPTEUR || '';
     document.getElementById('infra_id').value = data.INFRA_ID || 0;
 
     // Afficher les champs spécifiques selon le type

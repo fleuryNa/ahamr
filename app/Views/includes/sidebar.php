@@ -115,6 +115,12 @@
                            <p>Infrastructure</p>
                         </a>
                      </li>
+                     <li class="nav-item">
+                        <a href="<?php echo base_url('infrastructure/maintenance') ?>" class="nav-link<?php echo(end($segments) == 'maintenance') ? ' active' : ''; ?>">
+                           <i class="nav-icon bi bi-tools"></i>
+                           <p>Maintenance</p>
+                        </a>
+                     </li>
                   </ul>
                </li>
                <?php endif; ?>

@@ -195,10 +195,8 @@ class Aep extends BaseController
             } else {
                 // AJOUT
                 // Générer un code unique
-                // $data['CODE'] = $this->model->generateCode(
-                //     $postData['PROVINCE_ID'],
-                //     $postData['COMMUNE_ID']
-                // );
+                helper('number');
+                $data['CODE']          = generateInfraCode($data['PROVINCE_ID'], $data['COMMUNE_ID'], 6); // 6 = type aep
                 $data['DATE_CREATION'] = date('Y-m-d H:i:s');
 
                 $db->table('aep')->insert($data);
@@ -293,8 +291,20 @@ class Aep extends BaseController
             $sub_array[] = $row->MAITRE_OEUVRE;
             $sub_array[] = $row->POPULATION_COMMUNE_INITIAL;
             $sub_array[] = $row->POPULATION_DESSERVIE;
-            $sub_array[] = '<span onclick="modifier(' . $row->AEP_ID . ')" class="text-center" style="cursor:mouce-pointer;"><i class="bi bi-pencil-square"></i></span>';
-            $data[]      = $sub_array;
+            // $sub_array[] = '<span onclick="modifier(' .  . ')" class="text-center" style="cursor:mouce-pointer;"><i class="bi bi-pencil-square"></i></span>';
+            $sub_array[] = '
+                      <div class="btn-group">
+                        <button class="lodge-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Action</button>
+                        <ul class="dropdown-menu">
+                          <li>
+                           <a class="dropdown-item"  href="#" onclick="modifier(' . $row->AEP_ID . ')"><i class="bi bi-pencil-square"></i>Modifier</a>
+
+                          </li>
+                        </ul>
+                      </div>
+            ';
+
+            $data[] = $sub_array;
 
         }
 
@@ -440,6 +450,7 @@ class Aep extends BaseController
 
             } else {
                 // AJOUT
+
                 $result  = $this->model->insertLastId('aep_exploitant', $data);
                 $message = 'Exploitant ajouté avec succès';
 

@@ -337,7 +337,7 @@ class Infrastructure extends BaseController
     {
         $var_search      = ! empty($_POST['search']['value']) ? $_POST['search']['value'] : null;
         $var_search      = str_replace("'", "\'", $var_search);
-        $query_principal = "SELECT `INFRA_ID`,i.NOM,i.CODE,p.PROVINCE_NAME,c.COMMUNE_NAME,e.DESCRIPTION ETAT,a.NOM NOM_RESEAU,`VOLUME`,(CASE WHEN `FONCTIONNALITE_ID`=1 THEN 'FONCTIONNEL' ELSE 'NON FONCTIONNEL' END) FONCTIONNEL,tb.DESCRIPTION TYPE_BRANCHEMENT FROM `aep_infrastructures` i JOIN provinces p ON i.PROVINCE=p.PROVINCE_ID JOIN communes c ON i.COMMUNE=c.COMMUNE_ID JOIN aep_etat e ON i.ETAT_ID=e.ETAT_ID JOIN aep a ON i.AEP=a.AEP_ID JOIN aep_type_branchement tb ON i.TYPE_BRANCHEMENT_ID=tb.TYPE_BRANCHEMENT_ID WHERE `TYPE_INFRA_ID`=5";
+        $query_principal = "SELECT `INFRA_ID`,i.NUMERO_COMPTEUR,i.NOM,i.CODE,p.PROVINCE_NAME,c.COMMUNE_NAME,e.DESCRIPTION ETAT,a.NOM NOM_RESEAU,`VOLUME`,(CASE WHEN `FONCTIONNALITE_ID`=1 THEN 'FONCTIONNEL' ELSE 'NON FONCTIONNEL' END) FONCTIONNEL,tb.DESCRIPTION TYPE_BRANCHEMENT, concat(ti.DESCRIPTION,'(',i.NOM_INSTITUTION,')') INSTUTITION FROM `aep_infrastructures` i JOIN provinces p ON i.PROVINCE=p.PROVINCE_ID JOIN communes c ON i.COMMUNE=c.COMMUNE_ID JOIN aep_etat e ON i.ETAT_ID=e.ETAT_ID JOIN aep a ON i.AEP=a.AEP_ID JOIN aep_type_branchement tb ON i.TYPE_BRANCHEMENT_ID=tb.TYPE_BRANCHEMENT_ID LEFT JOIN aep_branchement_type_institution ti ON i.BR_TYPE_INSTITUTION_ID=ti.BR_TYPE_INSTITUTION_ID WHERE `TYPE_INFRA_ID`=5";
 
         $group    = "";
         $critaire = "";
@@ -353,7 +353,7 @@ class Infrastructure extends BaseController
             'NOM_RESEAU',
             'FONCTIONNEL',
             'ETAT',
-            'i.NOM', 'TYPE_BRANCHEMENT',
+            'i.NOM', 'TYPE_BRANCHEMENT', 'NOM_INSTUTITION', 'NUMERO_COMPTEUR',
             'CODE',
             'INFRA_ID'];
         if (isset($_POST['order'])) {
@@ -385,6 +385,8 @@ class Infrastructure extends BaseController
             $sub_array[] = $row->ETAT;
             $sub_array[] = $row->NOM;
             $sub_array[] = $row->TYPE_BRANCHEMENT;
+            $sub_array[] = $row->INSTUTITION;
+            $sub_array[] = $row->NUMERO_COMPTEUR;
             $sub_array[] = $row->CODE;
 
             $sub_array[] = '<span onclick="modifier(' . $row->INFRA_ID . ')" class="text-center" style="cursor:mouce-pointer;"><i class="bi bi-pencil-square"></i></span>';
@@ -449,7 +451,7 @@ class Infrastructure extends BaseController
 
             case 5: // Branchement (BF)
                 $rules['TYPE_BRANCHEMENT_ID'] = 'required|integer';
-                if ($this->request->getPost('TYPE_BRANCHEMENT_ID') == 2) {                   // Si c'est une borne fontaine
+                if ($this->request->getPost('TYPE_BRANCHEMENT_ID') == 1) {                   // Si c'est branchement publique
                     $rules['NOM_INSTITUTION']        = 'required|min_length[2]|max_length[255]'; // Le nom est obligatoire pour les bornes fontaines
                     $rules['BR_TYPE_INSTITUTION_ID'] = 'required';                               // Le nom est obligatoire pour les bornes fontaines
                 }
@@ -493,6 +495,8 @@ class Infrastructure extends BaseController
                 $data['TYPE_BRANCHEMENT_ID']    = null;
                 $data['BR_TYPE_INSTITUTION_ID'] = null;
                 $data['NOM_INSTITUTION']        = null;
+                $data['NUMERO_COMPTEUR']        = null;
+
                 break;
 
             case 2: // Chambre
@@ -506,6 +510,7 @@ class Infrastructure extends BaseController
                 $data['TYPE_BRANCHEMENT_ID']    = null;
                 $data['BR_TYPE_INSTITUTION_ID'] = null;
                 $data['NOM_INSTITUTION']        = null;
+                $data['NUMERO_COMPTEUR']        = null;
                 break;
 
             case 3: // Conduite
@@ -519,6 +524,7 @@ class Infrastructure extends BaseController
                 $data['TYPE_BRANCHEMENT_ID']    = null;
                 $data['BR_TYPE_INSTITUTION_ID'] = null;
                 $data['NOM_INSTITUTION']        = null;
+                $data['NUMERO_COMPTEUR']        = null;
                 break;
 
             case 4: // Réservoir
@@ -532,6 +538,7 @@ class Infrastructure extends BaseController
                 $data['TYPE_BRANCHEMENT_ID']    = null;
                 $data['BR_TYPE_INSTITUTION_ID'] = null;
                 $data['NOM_INSTITUTION']        = null;
+                $data['NUMERO_COMPTEUR']        = null;
                 break;
 
             case 5: // Branchement
@@ -545,6 +552,8 @@ class Infrastructure extends BaseController
                 $data['TYPE_BRANCHEMENT_ID']    = $postData['TYPE_BRANCHEMENT_ID'];
                 $data['BR_TYPE_INSTITUTION_ID'] = $postData['BR_TYPE_INSTITUTION_ID'];
                 $data['NOM_INSTITUTION']        = $postData['NOM_INSTITUTION'];
+                $data['NUMERO_COMPTEUR']        = $postData['NUMERO_COMPTEUR'];
+
                 break;
         }
         $db = db_connect();
@@ -565,6 +574,8 @@ class Infrastructure extends BaseController
                 $message = 'Infrastructure mise à jour avec succès';
             } else {
                 // Ajout
+                helper('number');
+                $data['CODE']          = generateInfraCode($data['PROVINCE'], $data['COMMUNE'], $data['TYPE_INFRA_ID']);
                 $data['DATE_CREATION'] = date('Y-m-d H:i:s');
                 $db->table('aep_infrastructures')->insert($data);
                 $result  = $db->insertID();
