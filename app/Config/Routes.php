@@ -37,3 +37,14 @@ $routes->group('admin', ['filter' => 'checkLogin'], function ($routes) {
     $routes->post('toggleStatus', 'SystemUser::toggleStatus');
 
 });
+
+// routes du module SIG
+$routes->group('sig', static function ($routes) {
+    // Page carte (ta route existante - on ne touche pas)
+    $routes->get('carte_infrastructure', '\App\Modules\sig\Controllers\CarteInfrastructures::index');
+
+    //  Route API pour récupérer les points (Leaflet)
+    $routes->get('carte_infrastructure/points', '\App\Modules\sig\Controllers\CarteInfrastructures::points');
+
+    $routes->get('sig/carte_infrastructure/detail/(:num)', 'App\Modules\Sig\Controllers\CarteInfrastructures::detail/$1');
+});

@@ -18,6 +18,12 @@
 
     <!--  Select2 -->
     <script src="<?php echo base_url('assets/js/select2.min.js') ?>"></script>
+
+    <!-- leaflet -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    
+    <!-- leaflet -->
 <script>
 
         const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";

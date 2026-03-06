@@ -20,6 +20,16 @@
     <link href="<?php echo base_url('assets/css/font-awesome.min.css') ?>" rel="stylesheet">
     <!-- Select2 CSS -->
     <link href="<?php echo base_url('assets/css/select2.min.css') ?>" rel="stylesheet" />
+
+    <!-- leaflet -->
+     <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <style>
+    #map { height: 620px; width: 100%; border-radius: 12px; }
+    </style>
+    <!-- leaflet -->
     <style>
 .lodge-primary {
     background: linear-gradient(135deg, #031d37, #052a4d);
