@@ -92,7 +92,7 @@
                <?php endif; ?>
 
 
-<?php if (hasRole('admin')): ?>
+            <?php if (hasRole('admin')): ?>
                <li class="nav-item<?php echo(in_array('admin', $segments)) ? ' menu-open' : ''; ?>">
                   <a href="#" class="nav-link ">
                      <i class="nav-icon bi bi-gear-fill"></i>
@@ -117,6 +117,30 @@
                   </ul>
                </li>
                <?php endif; ?>
+
+               
+                  <li class="nav-item<?php echo(in_array('sig', $segments)) ? ' menu-open' : ''; ?>">
+                     <a href="#" class="nav-link">
+                        <i class="nav-icon bi bi-map"></i>
+                        <p>
+                           SIG
+                           <i class="nav-arrow bi bi-chevron-right"></i>
+                        </p>
+                     </a>
+
+                     <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                           <a href="<?php echo base_url('sig/carte_infrastructure') ?>"
+                              class="nav-link<?php echo(end($segments) === 'infrastructure') ? ' active' : ''; ?>">
+                              <i class="nav-icon bi bi-diagram-3"></i>
+                              <p>Infrastructure</p>
+                           </a>
+                        </li>
+
+                     </ul>
+                  </li>
+              
             </ul>
             <!--end::Sidebar Menu-->
          </nav>
