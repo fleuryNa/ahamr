@@ -134,7 +134,7 @@
                 <div class="col-sm-6">
                     <h3 class="mb-0 fw-bold">Carte Réseau AEP</h3>
                     <div class="text-muted small mt-1">
-                        Visualisation des AEP reliés via EXECUTANT
+                        Visualisation des AEP reliés
                     </div>
                 </div>
                 <div class="col-sm-6">
