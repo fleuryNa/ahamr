@@ -46,5 +46,9 @@ $routes->group('sig', static function ($routes) {
     //  Route API pour récupérer les points (Leaflet)
     $routes->get('carte_infrastructure/points', '\App\Modules\sig\Controllers\CarteInfrastructures::points');
 
-    $routes->get('sig/carte_infrastructure/detail/(:num)', 'App\Modules\Sig\Controllers\CarteInfrastructures::detail/$1');
+    $routes->get('aep_map', '\App\Modules\sig\Controllers\CarteAep::index');
+    $routes->get('aep_map/data', '\App\Modules\sig\Controllers\CarteAep::data');
+
+    $routes->get('maintenance', '\App\Modules\sig\Controllers\CarteMaintenance::index');
+    $routes->get('maintenance/data', '\App\Modules\sig\Controllers\CarteMaintenance::data');
 });

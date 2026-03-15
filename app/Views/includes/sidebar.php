@@ -137,6 +137,19 @@
                               <p>Infrastructure</p>
                            </a>
                         </li>
+                        <li class="nav-item">
+                           <a href="<?php echo base_url('sig/maintenance') ?>"
+                              class="nav-link<?php echo(end($segments) === 'maintenance') ? ' active' : ''; ?>">
+                              <i class="nav-icon bi bi-wrench"></i>
+                              <p>Maintenance</p>
+                           </a>
+                        </li>
+                        <li class="nav-item">
+                           <a href="<?php echo base_url('sig/aep_map') ?>"
+                              class="nav-link<?php echo(end($segments) === 'aep_map') ? ' active' : ''; ?>">
+                              <i class="nav-icon bi bi-droplet"></i>
+                              <p>AEP</p>
+                           </a>
 
                      </ul>
                   </li>
